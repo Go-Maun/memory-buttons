@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <p>How many buttons to create? A number between 5 and 100</p>
+    <input id="text" type="text">
+    <input id="go" type="button" value="go">
+    <h4 id="answer"></h4>
+
+    <script>
+
+        document.getElementById("answer").zIndex = 101
+        let height = window.innerHeight;
+        let width = window.innerWidth;
+        let arr = [];
+        let order = 0
+        let find = 0
+
+
+        function buttons(x, y, z, colour, order) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.colour = colour;
+            this.order = order
+            this.btn = document.createElement("BUTTON");
+            this.btn.style = "height: 5em; width: 10em; background-color: " + colour;
+            this.btn.style.top = y + "px";
+            this.btn.style.left = x + "px";
+            this.btn.style.zIndex = z;
+            this.btn.style.position = "absolute";
+            this.btn.style.visibility = "visible";
+            this.found = function () {
+                if (find === order) {
+                    find++;
+                    document.getElementById("answer").innerHTML = "";
+                    this.style.visibility = "hidden";
+                } else {
+                    document.getElementById("answer").innerHTML = "Wrong Button!"
+                }
+            }
+            this.btn.onclick = this.found;
+            document.body.appendChild(this.btn);
+        }
+
+        function moveButtons() {
+            for (let i = 0; i < arr.length; i++) {
+                let x = Math.floor(Math.random() * (width * (7 / 9)));
+                let y = Math.floor(Math.random() * (height * (7 / 9)));
+                arr[i].btn.style.top = y + "px";
+                arr[i].btn.style.left = x + "px";
+            }
+        }
+
+
+        function createButtons(number) {
+            let x = 50
+            let y = 100
+            let z = 100
+            for (let i = 0; i < number; i++) {
+                let colour = "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")";
+                let btn = new buttons(x, y, z, colour, order);
+                arr.push(btn);
+                if (x < (width * (7 / 9))) {
+                    x += 125
+                } else {
+                    x = 50
+                    y += 40
+                }
+                order++;
+                z--;
+            }
+        }
+
+        function validate() {
+            let number = parseInt(document.getElementById("text").value);
+            if (5 <= number) {
+                if (number <= 100) {
+                    document.getElementById("answer").innerHTML = "OK"
+                    createButtons(number)
+                    document.getElementById("go").style.visibility = "hidden"
+                }
+                else {
+                    document.getElementById("answer").innerHTML = "A Number Between 5 and 100"
+                }
+            } else {
+                document.getElementById("answer").innerHTML = "A Number Between 5 and 100"
+            }
+            setTimeout(function () { moveButtons() }, 5000)
+        }
+
+        document.getElementById("go").onclick = validate
+
+
+    </script>
+
+</body>
+
+</html>
